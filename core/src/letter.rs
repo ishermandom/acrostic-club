@@ -338,7 +338,8 @@ macro_rules! derive_archive_trivial {
                 resolver: Self::Resolver,
                 out: *mut Self::Archived,
             ) {
-                out.write(*self)
+                // SAFETY: `Archive::resolve`'s caller guarantees that `out` is valid for writes.
+                unsafe { out.write(*self) }
             }
         }
 
@@ -360,7 +361,9 @@ macro_rules! derive_archive_trivial {
                 value: *const Self,
                 context: &mut V,
             ) -> Result<&'a Self, Self::Error> {
-                Ok(&*value)
+                // SAFETY: the caller guarantees that `value` is aligned and points to enough bytes
+                // for `Self`, and `Self` is plain bytes, so any byte pattern is a valid value.
+                Ok(unsafe { &*value })
             }
         }
     };
