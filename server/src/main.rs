@@ -1,4 +1,3 @@
-#![feature(option_get_or_insert_default)]
 #![feature(future_join)]
 #![allow(unused_imports)]
 #![deny(unused_must_use)]
